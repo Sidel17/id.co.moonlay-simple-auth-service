@@ -50,12 +50,7 @@ namespace Co.Id.Moonlay.Simple.Auth.Service.WebApi
         {
             services
                  .AddTransient<IRoleService, RoleService>()
-                 .AddTransient<IAccountService, AccountService>()
-                 .AddTransient<IAccountProfileService, AccountProfileService>()
-                 .AddTransient<IFamilyDataService, FamilyDataService>()
-                 .AddTransient<IEducationInfoService, EducationInfoService>()
-                 .AddTransient<IInformalEducationService, InformalEducationService>()
-                 .AddTransient<IWorkingExperienceService, WorkingExperienceService>();
+                 .AddTransient<IAccountService, AccountService>();
         }
 
         // This method gets called by the runtime. Use this method to add services to the container.
@@ -66,10 +61,7 @@ namespace Co.Id.Moonlay.Simple.Auth.Service.WebApi
 
             string connectionString = Configuration.GetConnectionString(Constant.DEFAULT_CONNECTION) ?? Configuration[Constant.DEFAULT_CONNECTION];
             string env = Configuration.GetValue<string>(Constant.ASPNETCORE_ENVIRONMENT);
-
-            services
-                .AddDbContext<AuthDbContext>(options => options.UseSqlServer(connectionString));
-                
+            services.AddDbContext<AuthDbContext>(options => options.UseSqlServer(connectionString, c => c.CommandTimeout(120)));
 
             #region Register
             RegisterServices(services);

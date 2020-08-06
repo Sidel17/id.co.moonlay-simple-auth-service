@@ -75,7 +75,7 @@ namespace Co.Id.Moonlay.Simple.Auth.Service.Lib.Migrations
                     b.ToTable("Accounts");
                 });
 
-            modelBuilder.Entity("Co.Id.Moonlay.Simple.Auth.Service.Lib.Models.AccountProfile", b =>
+            modelBuilder.Entity("Co.Id.Moonlay.Simple.Auth.Service.Lib.Models.AccountInformation", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -84,8 +84,6 @@ namespace Co.Id.Moonlay.Simple.Auth.Service.Lib.Migrations
                     b.Property<int>("AccountId");
 
                     b.Property<bool>("Active");
-
-                    b.Property<int>("AssetID");
 
                     b.Property<string>("CoorporateEmail")
                         .HasMaxLength(225);
@@ -115,33 +113,19 @@ namespace Co.Id.Moonlay.Simple.Auth.Service.Lib.Migrations
 
                     b.Property<DateTimeOffset?>("Dob");
 
-                    b.Property<string>("EducationHistory")
-                        .HasMaxLength(255);
-
-                    b.Property<int>("EducationInfoId");
-
                     b.Property<string>("Email")
-                        .HasMaxLength(255);
-
-                    b.Property<string>("EmergencyContact")
                         .HasMaxLength(255);
 
                     b.Property<string>("EmployeeID")
                         .HasMaxLength(255);
 
-                    b.Property<string>("FamilyData")
-                        .HasMaxLength(255);
-
-                    b.Property<int>("FamilyId");
+                    b.Property<string>("EmployeePhoneNumber");
 
                     b.Property<string>("Fullname")
                         .HasMaxLength(255);
 
                     b.Property<string>("Gender")
                         .HasMaxLength(6);
-
-                    b.Property<string>("InfromalEducationHistory")
-                        .HasMaxLength(255);
 
                     b.Property<bool>("IsDeleted");
 
@@ -163,8 +147,6 @@ namespace Co.Id.Moonlay.Simple.Auth.Service.Lib.Migrations
                     b.Property<string>("Password")
                         .HasMaxLength(25);
 
-                    b.Property<int>("PayrollID");
-
                     b.Property<string>("Religion")
                         .HasMaxLength(15);
 
@@ -174,10 +156,67 @@ namespace Co.Id.Moonlay.Simple.Auth.Service.Lib.Migrations
                     b.Property<string>("Status")
                         .HasMaxLength(25);
 
-                    b.Property<string>("UId")
+                    b.HasKey("Id");
+
+                    b.ToTable("AccountInformations");
+                });
+
+            modelBuilder.Entity("Co.Id.Moonlay.Simple.Auth.Service.Lib.Models.AccountProfile", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("AccountId");
+
+                    b.Property<bool>("Active");
+
+                    b.Property<string>("CreatedAgent")
+                        .IsRequired()
                         .HasMaxLength(255);
 
-                    b.Property<string>("WorkingEXP")
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasMaxLength(255);
+
+                    b.Property<DateTime>("CreatedUtc");
+
+                    b.Property<string>("DeletedAgent")
+                        .IsRequired()
+                        .HasMaxLength(255);
+
+                    b.Property<string>("DeletedBy")
+                        .IsRequired()
+                        .HasMaxLength(255);
+
+                    b.Property<DateTime>("DeletedUtc");
+
+                    b.Property<DateTimeOffset?>("Dob");
+
+                    b.Property<string>("Email");
+
+                    b.Property<string>("Firstname")
+                        .HasMaxLength(255);
+
+                    b.Property<string>("Gender")
+                        .HasMaxLength(6);
+
+                    b.Property<bool>("IsDeleted");
+
+                    b.Property<string>("LastModifiedAgent")
+                        .IsRequired()
+                        .HasMaxLength(255);
+
+                    b.Property<string>("LastModifiedBy")
+                        .IsRequired()
+                        .HasMaxLength(255);
+
+                    b.Property<DateTime>("LastModifiedUtc");
+
+                    b.Property<string>("Lastname")
+                        .HasMaxLength(255);
+
+                    b.Property<string>("UId")
                         .HasMaxLength(255);
 
                     b.HasKey("Id");
@@ -257,6 +296,8 @@ namespace Co.Id.Moonlay.Simple.Auth.Service.Lib.Migrations
 
                     b.Property<bool>("Active");
 
+                    b.Property<int>("AssetID");
+
                     b.Property<string>("AssetName")
                         .HasMaxLength(255);
 
@@ -284,6 +325,8 @@ namespace Co.Id.Moonlay.Simple.Auth.Service.Lib.Migrations
                         .HasMaxLength(255);
 
                     b.Property<DateTime>("DeletedUtc");
+
+                    b.Property<string>("FullNameEmployeeAsset");
 
                     b.Property<bool>("IsDeleted");
 
@@ -362,6 +405,60 @@ namespace Co.Id.Moonlay.Simple.Auth.Service.Lib.Migrations
                     b.ToTable("EducationInfos");
                 });
 
+            modelBuilder.Entity("Co.Id.Moonlay.Simple.Auth.Service.Lib.Models.EmergencyContact", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<bool>("Active");
+
+                    b.Property<string>("CreatedAgent")
+                        .IsRequired()
+                        .HasMaxLength(255);
+
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasMaxLength(255);
+
+                    b.Property<DateTime>("CreatedUtc");
+
+                    b.Property<string>("DeletedAgent")
+                        .IsRequired()
+                        .HasMaxLength(255);
+
+                    b.Property<string>("DeletedBy")
+                        .IsRequired()
+                        .HasMaxLength(255);
+
+                    b.Property<DateTime>("DeletedUtc");
+
+                    b.Property<bool>("IsDeleted");
+
+                    b.Property<string>("LastModifiedAgent")
+                        .IsRequired()
+                        .HasMaxLength(255);
+
+                    b.Property<string>("LastModifiedBy")
+                        .IsRequired()
+                        .HasMaxLength(255);
+
+                    b.Property<DateTime>("LastModifiedUtc");
+
+                    b.Property<string>("NameOfContact")
+                        .HasMaxLength(225);
+
+                    b.Property<string>("PhoneNumber")
+                        .HasMaxLength(20);
+
+                    b.Property<string>("Relationship")
+                        .HasMaxLength(25);
+
+                    b.HasKey("Id");
+
+                    b.ToTable("EmergencyContacts");
+                });
+
             modelBuilder.Entity("Co.Id.Moonlay.Simple.Auth.Service.Lib.Models.FamilyData", b =>
                 {
                     b.Property<int>("Id")
@@ -392,8 +489,6 @@ namespace Co.Id.Moonlay.Simple.Auth.Service.Lib.Migrations
 
                     b.Property<DateTime>("DeletedUtc");
 
-                    b.Property<int>("FamilyId");
-
                     b.Property<string>("FullNameOfFamily")
                         .HasMaxLength(255);
 
@@ -414,12 +509,6 @@ namespace Co.Id.Moonlay.Simple.Auth.Service.Lib.Migrations
                         .HasMaxLength(255);
 
                     b.Property<DateTime>("LastModifiedUtc");
-
-                    b.Property<string>("NameOfContact")
-                        .HasMaxLength(255);
-
-                    b.Property<string>("PhoneNumber")
-                        .HasMaxLength(255);
 
                     b.Property<string>("Relationship")
                         .HasMaxLength(20);
@@ -467,10 +556,14 @@ namespace Co.Id.Moonlay.Simple.Auth.Service.Lib.Migrations
 
                     b.Property<DateTimeOffset?>("EndDate");
 
+                    b.Property<string>("FileURL");
+
                     b.Property<string>("HeldBy")
                         .HasMaxLength(255);
 
                     b.Property<bool>("IsDeleted");
+
+                    b.Property<string>("JobPosition");
 
                     b.Property<string>("LastModifiedAgent")
                         .IsRequired()
@@ -497,14 +590,11 @@ namespace Co.Id.Moonlay.Simple.Auth.Service.Lib.Migrations
 
                     b.Property<bool>("Active");
 
-                    b.Property<string>("Allowance")
-                        .HasMaxLength(255);
+                    b.Property<int>("Allowance");
 
-                    b.Property<string>("BPJSKesehatan")
-                        .HasMaxLength(255);
+                    b.Property<int>("BPJSKesehatan");
 
-                    b.Property<string>("BPJSTenagaKerja")
-                        .HasMaxLength(255);
+                    b.Property<int>("BPJSTenagaKerja");
 
                     b.Property<DateTimeOffset>("BackDatedPayment");
 
@@ -537,8 +627,7 @@ namespace Co.Id.Moonlay.Simple.Auth.Service.Lib.Migrations
 
                     b.Property<DateTime>("DeletedUtc");
 
-                    b.Property<string>("Incentive")
-                        .HasMaxLength(255);
+                    b.Property<int>("Incentive");
 
                     b.Property<bool>("IsDeleted");
 
@@ -552,25 +641,28 @@ namespace Co.Id.Moonlay.Simple.Auth.Service.Lib.Migrations
 
                     b.Property<DateTime>("LastModifiedUtc");
 
-                    b.Property<string>("NPWP")
-                        .HasMaxLength(255);
+                    b.Property<string>("Month");
+
+                    b.Property<int>("NPWP");
 
                     b.Property<string>("NameBankAccount")
                         .HasMaxLength(255);
 
-                    b.Property<string>("PaidLeave")
-                        .HasMaxLength(255);
+                    b.Property<int>("PaidLeave");
 
                     b.Property<int>("PayrollID");
 
-                    b.Property<string>("Salary")
-                        .HasMaxLength(255);
+                    b.Property<int>("Salary");
 
-                    b.Property<string>("SalaryPeriod")
-                        .HasMaxLength(255);
+                    b.Property<string>("SalaryPeriod");
 
-                    b.Property<string>("Tax")
-                        .HasMaxLength(255);
+                    b.Property<int>("TakeHomePay");
+
+                    b.Property<int>("Tax");
+
+                    b.Property<int>("UnPaidLeave");
+
+                    b.Property<int>("Year");
 
                     b.HasKey("Id");
 
@@ -609,9 +701,6 @@ namespace Co.Id.Moonlay.Simple.Auth.Service.Lib.Migrations
                         .HasMaxLength(255);
 
                     b.Property<bool>("IsDeleted");
-
-                    b.Property<string>("JobStatus")
-                        .HasMaxLength(225);
 
                     b.Property<string>("JobTitleCode")
                         .HasMaxLength(255);
@@ -738,7 +827,7 @@ namespace Co.Id.Moonlay.Simple.Auth.Service.Lib.Migrations
 
                     b.Property<bool>("IsDeleted");
 
-                    b.Property<string>("JobPosition")
+                    b.Property<string>("JobPositionExperience")
                         .HasMaxLength(255);
 
                     b.Property<string>("LastModifiedAgent")

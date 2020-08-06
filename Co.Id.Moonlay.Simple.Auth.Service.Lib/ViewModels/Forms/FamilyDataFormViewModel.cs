@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using Com.Moonlay.Models;
+using System.ComponentModel.DataAnnotations;
 using System.Text;
 
-namespace Co.Id.Moonlay.Simple.Auth.Service.Lib.Models
+namespace Co.Id.Moonlay.Simple.Auth.Service.Lib.ViewModels.Forms
 {
-    public class FamilyData : StandardEntity
+    public class FamilyDataFormViewModel : IValidatableObject
     {
         public string FullNameOfFamily { get; set; }
         public string Relationship { get; set; }
@@ -14,5 +14,9 @@ namespace Co.Id.Moonlay.Simple.Auth.Service.Lib.Models
         public string Gender { get; set; }
         public string KTPNumber { get; set; }
 
+        public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

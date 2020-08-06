@@ -30,8 +30,8 @@ namespace Co.Id.Moonlay.Simple.Auth.Service.Test.DataUtils
                     Dob = DateTimeOffset.UtcNow,
                     Email = "email",
                     Gender = "male",
-                    Fullname = "fullname",
-                    EmployeeID = "employeeid"
+                    Firstname = "firstname",
+                    Lastname = "lastname"
                 },
                 AccountRoles = new List<AccountRole>()
             };
@@ -48,9 +48,9 @@ namespace Co.Id.Moonlay.Simple.Auth.Service.Test.DataUtils
                 {
                     dob = DateTimeOffset.UtcNow,
                     email = "email",
-                    fullname = "fullname",
+                    firstname = "firstname",
                     gender = "gender",
-                    employeeid = "employeeid"
+                    lastname = "lastname"
                 },
                 roles = new List<RoleViewModel>()
             };

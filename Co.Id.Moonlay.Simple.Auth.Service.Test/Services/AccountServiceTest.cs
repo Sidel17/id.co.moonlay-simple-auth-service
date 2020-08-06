@@ -111,7 +111,7 @@ namespace Co.Id.Moonlay.Simple.Auth.Service.Test.Services
             vm.profile = new AccountProfileViewModel()
             {
                 id = 1,
-                fullname = "test"
+                firstname = "test"
             };
             Assert.False(vm.Validate(context).Count() > 0);
 

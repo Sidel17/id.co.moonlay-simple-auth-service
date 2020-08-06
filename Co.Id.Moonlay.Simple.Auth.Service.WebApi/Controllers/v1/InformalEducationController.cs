@@ -10,8 +10,12 @@ using Co.Id.Moonlay.Simple.Auth.Service.Lib.ViewModels.Forms;
 using Co.Id.Moonlay.Simple.Auth.Service.WebApi.Utilities;
 using Com.Moonlay.Models;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
+using Microsoft.WindowsAzure.Storage;
+using Microsoft.WindowsAzure.Storage.Blob;
 using Newtonsoft.Json;
 using Swashbuckle.AspNetCore.Swagger;
 using System;
@@ -26,19 +30,21 @@ namespace Co.Id.Moonlay.Simple.Auth.Service.WebApi.Controllers.v1
     [Route("v{version:apiVersion}/informaleducation")]
     [Authorize]
 
-    public class InformalEducationController : Controller
+    public class InformalEducationController : ControllerBase
     {
         private const string UserAgent = "auth-service";
         private readonly AuthDbContext _context;
         public static readonly string ApiVersion = "1.0.0";
         private readonly IIdentityService _identityService;
         private readonly IValidateService _validateService;
+        //private readonly IOptions<MyConfig> config;
 
         public InformalEducationController(IIdentityService identityService, IValidateService validateService, AuthDbContext dbContext)
         {
             _identityService = identityService;
             _validateService = validateService;
             _context = dbContext;
+            //this.config = config;
         }
 
         protected void VerifyUser()
@@ -55,8 +61,9 @@ namespace Co.Id.Moonlay.Simple.Auth.Service.WebApi.Controllers.v1
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<InformalEducation>> GetinformalEducations(long id)
+        public async Task<ActionResult<InformalEducation>> GetinformalEducations(int id)
         {
+            VerifyUser();
             var informalEducation = await _context.InformalEducations.FindAsync(id);
 
             if (informalEducation == null)
@@ -71,13 +78,43 @@ namespace Co.Id.Moonlay.Simple.Auth.Service.WebApi.Controllers.v1
         public async Task<ActionResult<InformalEducation>> PostinformalEducation([FromBody] InformalEducationFormViewModel informalEducation)
         {
             VerifyUser();
+            /*if (CloudStorageAccount.TryParse(config.Value.StorageConnection, out CloudStorageAccount storageAccount))
+            {
+                CloudBlobClient blobClient = storageAccount.CreateCloudBlobClient();
+
+                CloudBlobContainer container = blobClient.GetContainerReference(config.Value.Container);
+
+                var chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+                var stringChars = new char[8];
+                var random = new Random();
+                for (int i = 0; i < stringChars.Length; i++)
+                {
+                    stringChars[i] = chars[random.Next(chars.Length)];
+                }
+
+                var finalString = new String(stringChars);
+                CloudBlockBlob blockBlob = container.GetBlockBlobReference(finalString + stream.FileName);
+
+                string fileUrl = blockBlob?.Uri.ToString();
+                informalEducation.FileURL = fileUrl.ToString();
+
+                await blockBlob.UploadFromStreamAsync(stream.OpenReadStream());
+
+            }
+            else
+            {
+                return null;
+            }*/
+
             var model = new InformalEducation()
             {
                 Certificate = informalEducation.Certificate.GetValueOrDefault(),
                 Description = informalEducation.Description,
+                JobPosition = informalEducation.JobPosition,
                 EndDate = informalEducation.EndDate,
                 HeldBy = informalEducation.HeldBy,
-                StartDate = informalEducation.StartDate
+                StartDate = informalEducation.StartDate,
+                FileURL = informalEducation.FileURL
             };
             EntityExtension.FlagForCreate(model, _identityService.Username, UserAgent);
             _context.InformalEducations.Add(model);
@@ -86,14 +123,14 @@ namespace Co.Id.Moonlay.Simple.Auth.Service.WebApi.Controllers.v1
         }
 
         [HttpDelete("{id}")]
-        public async Task<ActionResult<InformalEducation>> DeleteInformalEducation(long id)
+        public async Task<ActionResult<InformalEducation>> DeleteInformalEducation(int id)
         {
+            VerifyUser();
             var informalEducation = await _context.InformalEducations.FindAsync(id);
             if (informalEducation == null)
             {
                 return NotFound();
             }
-
             _context.InformalEducations.Remove(informalEducation);
             await _context.SaveChangesAsync();
 
@@ -101,22 +138,31 @@ namespace Co.Id.Moonlay.Simple.Auth.Service.WebApi.Controllers.v1
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutInformalEducation(long id, InformalEducation informalEducation)
+        public async Task<IActionResult> PutInformalEducation(int id, [FromBody] InformalEducationFormViewModel informalEducation)
         {
-            if (id != informalEducation.Id)
+            /*if (id != informalEducation.Id)
             {
                 return BadRequest();
-            }
-
-            _context.Entry(informalEducation).State = EntityState.Modified;
+            }*/
 
             try
             {
+                VerifyUser();
+                var model = await _context.InformalEducations.FindAsync(id);
+                {
+                    model.Description = informalEducation.Description;
+                    model.JobPosition = informalEducation.JobPosition;
+                    model.EndDate = informalEducation.EndDate;
+                    model.HeldBy = informalEducation.HeldBy;
+                    model.StartDate = informalEducation.StartDate;
+                };
+                EntityExtension.FlagForUpdate(model, _identityService.Username, UserAgent);
+                _context.InformalEducations.Update(model);
                 await _context.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!informalEducationExist(id))
+                if (!InformalEducationExist(id))
                 {
                     return NotFound();
                 }
@@ -129,7 +175,7 @@ namespace Co.Id.Moonlay.Simple.Auth.Service.WebApi.Controllers.v1
             return NoContent();
         }
 
-        private bool informalEducationExist(long id)
+        private bool InformalEducationExist(int id)
         {
             return _context.InformalEducations.Any(e => e.Id == id);
         }

@@ -63,8 +63,8 @@ namespace Co.Id.Moonlay.Simple.Auth.Service.WebApi.Controllers.v1
 
                     payload["profile"] = new
                     {
-                        viewModel.profile.fullname,
-                        viewModel.profile.employeeid,
+                        viewModel.profile.firstname,
+                        viewModel.profile.lastname,
                         viewModel.profile.gender,
                         viewModel.profile.dob,
                         viewModel.profile.email
